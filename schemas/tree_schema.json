@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VectorlessRAG HierarchyTree",
+  "type": "object",
+  "properties": {
+    "document_title": { "type": "string" },
+    "source_file":    { "type": "string" },
+    "created_at":     { "type": "string" },
+    "total_pages":    { "type": "integer", "minimum": 0 },
+    "root":           { "$ref": "#/$defs/TreeNode" },
+    "build_log": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["document_title", "source_file", "created_at", "total_pages", "root"],
+  "$defs": {
+    "TreeNode": {
+      "type": "object",
+      "properties": {
+        "node_id":     { "type": "string", "minLength": 1 },
+        "title":       { "type": "string", "minLength": 1 },
+        "summary":     { "type": "string" },
+        "source_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "level":       { "type": "integer", "minimum": 0, "maximum": 10 },
+        "child_nodes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/TreeNode" }
+        },
+        "metadata":    { "type": "object" }
+      },
+      "required": ["node_id", "title", "summary", "level"]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vectorless-rag"
+version = "0.1.0"
+description = "Hierarchical reasoning tree from PDFs using a local LLM — no vector embeddings required."
+readme = "README.md"
+requires-python = ">=3.9.6"
+license = "MIT"
+dependencies = [
+    "pymupdf>=1.24",       # PDF parsing (fitz)
+    "pydantic>=2.0",       # Data models & validation
+    "ollama>=0.3",         # Ollama Python library (local daemon)
+    "tenacity>=8.0",       # Retry logic with exponential backoff
+    "jsonschema>=4.0",     # JSON Schema validation on final export
+    "rich>=13.0",          # CLI progress bars & pretty logging
+    "click>=8.0",          # CLI framework for examples/
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "ruff",
+]
+
+[project.scripts]
+vrag-build = "vectorless_rag.cli:build"
+vrag-query = "vectorless_rag.cli:query"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["vectorless_rag*", "schemas*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
